@@ -47,33 +47,52 @@ def min_path(graph, start, end, maxD=1e309):
       return "NO SUCH ROUTE", []
 
     return dist, path
-
-
-def num_trips(graph, start, end, stops, mode, maxD=1e309):
-
-  next_nodes = set(graph.edges[start])
   
-  print "start", start
-  print "end", end
-  print "next_nodes", next_nodes
 
+def num_trips(graph, start, end, total_stops, mode, maxD=1e309):
+
+  stops = 0
   trips = 0
-  current_stops = 0
-  
+  next_nodes = set(graph.edges[start])
+  print "start", start
+
+  print next_nodes
   for item in next_nodes:
-    if item == end:
+    print "item", item
+    if graph.near_to(item, end):
+      print "FOUND END:", item
       trips += 1
-      return trips
     else:
-      current_stops += 1
-      if current_stops > stops:
-        print "max stops reached"
-        return False
-      
-      trips += num_trips(graph, item, end, stops, mode, maxD)
+      stops += 1
+      print "stops", stops
+      next2_nodes = set(graph.edges[item])
+      for item2 in next2_nodes:
+        print "item2", item2
+        if graph.near_to(item2, end):
+          print "FOUND END2:", item2
+          trips += 1
+        else:
+          stops += 1
+          print "stops", stops
+          next3_nodes = set(graph.edges[item2])
+          for item3 in next3_nodes:
+            print "item3", item3
+            if graph.near_to(item3, end):
+              print "FOUND END2:", item2
+              trips += 1
+            else:
+              stops += 1
+              print "stops", stops
+              next4_nodes = set(graph.edges[item3])
+              for item4 in next4_nodes:
+                print "item4", item4
+                if graph.near_to(item4, end):
+                  print "FOUND END4:", item4
+                  trips += 1
 
-  return trips
-
+  print "FINAL"
+  print "stops", stops
+  print "trips", trips
 
 
 def distance_route(graph, *args):
