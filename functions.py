@@ -30,7 +30,7 @@ def dijkstra(graph, start, maxD=1e309):
 def min_path(graph, start, end, maxD=1e309):
     """Returns the minimum distance and path from start to end."""
     tdist, preceding_node = dijkstra(graph, start, maxD)
-    
+
     # print tdist, preceding_node
 
     dist = tdist[end]
@@ -47,7 +47,7 @@ def min_path(graph, start, end, maxD=1e309):
       return "NO SUCH ROUTE", []
 
     return dist, path
-  
+
 
 def num_trips(graph, start, end, total_stops, mode, maxD=1e309):
 
@@ -95,10 +95,40 @@ def num_trips(graph, start, end, total_stops, mode, maxD=1e309):
   print "trips", trips
 
 
+def next_elements(graph, start, max_stops=15 , stops=0):
+  print "NE: start", start
+  print "NE: stop", stops
+  if stops == max_stops:
+    return []
+
+  return set(graph.edges[start])
+
+def all_routes(graph, start, final, max_stops, stops=0):
+  connecting_routes = defaultdict(list)
+  destinations = set(graph.edges[start])
+  connecting_routes[start] = list(destinations)
+  for d in destinations:
+    n_elements = next_elements(graph, d, max_stops, stops + 1)
+
+    print "destination", d
+    print "next_elements", n_elements
+
+    for n in n_elements:
+      connecting_routes[d].append(n)
+
+  print "connecting_routes", connecting_routes
+  return connecting_routes
+
+
+def total_trips():
+  # Create function to calculate total trips using all_routes
+  return False
+
+
 def distance_route(graph, *args):
   pivot = args[0]
   total = 0
-  try: 
+  try:
     for item in args[1:]:
       total += graph.distance(pivot, item)
       pivot = item
